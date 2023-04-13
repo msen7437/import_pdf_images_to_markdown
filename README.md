@@ -34,12 +34,14 @@
 
 `-f` -> filename of the markdown file
 
+`-n` -> namescheme for the images
 
+- Images will be named `<namescheme>1.jpg`, `<namescheme>2.jpg`, ...
 
 ### Run:
 
 ```shell
-$ python3 import.py -i path/to/file.pdf -o path/to/output/ -f example.md
+$ python3 import.py -i path/to/file.pdf -o path/to/output/ -f example.md -n imagename
 ```
 
 

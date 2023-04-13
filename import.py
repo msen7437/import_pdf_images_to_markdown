@@ -10,21 +10,24 @@ parser.add_argument("-i", "--input", help="input pdf file")
 parser.add_argument("-o", "--output", help="output directory")
 # add filename
 parser.add_argument("-f", "--filename", help="output markdown file")
+parser.add_argument("-n", "--namescheme", help="namescheme for images")
 args = parser.parse_args()
 
 
 def main():
-    pdf_to_image(args.input, args.output)
-    print("--------------------------")
+    pdf_to_image(args.input, args.output, args.namescheme)
     write_images_to_markdown(args.output, args.output, args.filename)
 
 
-def pdf_to_image(pdf_path, image_path):
+def pdf_to_image(pdf_path, image_path, image_name_scheme="image"):
     pages = convert_from_path(pdf_path, 500)
     index = 1
     for page in pages:
         page.save(
-            os.path.join(image_path, "images", str(index) + ".jpg"), "JPEG"
+            os.path.join(
+                image_path, "images", image_name_scheme + str(index) + ".jpg"
+            ),
+            "JPEG",
         )
         index += 1
 
@@ -33,7 +36,8 @@ def write_images_to_markdown(markdown_directory, image_directory, filename):
     images = os.path.join(image_directory, "images")
     with open(os.path.join(markdown_directory, filename), "w") as f:
         for image in os.listdir(images):
-            f.write("![%s](%s)\n" % (image, os.path.join("images", image)))
+            if image.endswith(".jpg"):
+                f.write("![%s](%s)\n" % (image, os.path.join("images", image)))
 
 
 if __name__ == "__main__":
