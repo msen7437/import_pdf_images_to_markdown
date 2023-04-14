@@ -1,4 +1,5 @@
 # convert pdf to image
+from email.mime import image
 from pdf2image import convert_from_path
 import argparse
 import os
@@ -23,7 +24,9 @@ def main():
     if args.namescheme == None:
         args.namescheme = "image"
     pdf_to_image(args.input, args.output, args.namescheme, args.resolution)
-    write_images_to_markdown(args.output, args.output, args.filename)
+    write_images_to_markdown(
+        args.output, args.output, args.filename, args.namescheme
+    )
 
 
 def pdf_to_image(
@@ -42,12 +45,20 @@ def pdf_to_image(
         index += 1
 
 
-def write_images_to_markdown(markdown_directory, image_directory, filename):
+def write_images_to_markdown(
+    markdown_directory, image_directory, filename, imagename
+):
     images = os.path.join(image_directory, "images")
     with open(os.path.join(markdown_directory, filename), "w") as f:
-        for image in os.listdir(images):
+        index = 1
+        while os.path.isfile(
+            os.path.join(images, imagename + str(index) + ".jpg")
+        ):
+            image = imagename + str(index) + ".jpg"
             if image.endswith(".jpg"):
                 f.write("![%s](%s)\n" % (image, os.path.join("images", image)))
+
+            index += 1
 
 
 if __name__ == "__main__":
