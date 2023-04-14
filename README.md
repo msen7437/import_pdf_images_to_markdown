@@ -38,6 +38,8 @@
 
 - Images will be named `<namescheme>1.jpg`, `<namescheme>2.jpg`, ...
 
+`-r` -> image resolution, default 200. Should be set lower if the pdf file is really big in order to avoid an eviction
+
 ### Run:
 
 ```shell
